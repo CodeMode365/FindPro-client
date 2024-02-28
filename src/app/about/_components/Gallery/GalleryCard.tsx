@@ -9,7 +9,7 @@ const GalleryCard = () => {
       <div className="h-full border-2 border-gray-200 rounded-lg overflow-hidden">
         <Image
           className="lg:h-72 md:h-36 w-full object-cover object-center"
-          src="https://picsum.photos/720/400"
+          src="/assets/gold.webp"
           alt="blog"
           height={320}
           width={400}
