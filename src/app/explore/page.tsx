@@ -10,10 +10,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import BannerCarousel from "./_components/Banner/BannerCrousel";
 
 const Explore = () => {
   return (
     <div className="w-full ml-4 p-2 grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+      <div className="w-full h-auto col-span-full rounded-md shadow-lg">
+        <BannerCarousel />
+      </div>
+
       <Professionals />
 
       <div className="w-full col-span-full">
