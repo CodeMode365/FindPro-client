@@ -3,10 +3,11 @@ import NavLinks from "./NavLinks";
 import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import MiniNav from "./MiniNav";
 
 const Navbar = () => {
   return (
-    <header className="bg-white/80 backdrop-blur-md shadow-md mt-2 sticky top-0 z-20 border-b-2 border-black/20">
+    <header className="bg-white/80 backdrop-blur-md shadow-md pt-2 sticky top-0 z-20 border-b-2 border-black/20">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="md:flex md:items-center md:gap-12">
@@ -40,9 +41,11 @@ const Navbar = () => {
             </div>
 
             <div className="block md:hidden">
-              <Button>
-                <Menu />
-              </Button>
+              <MiniNav>
+                <Button variant={"outline"} className="text-primary hover:text-primary">
+                  <Menu />
+                </Button>
+              </MiniNav>
             </div>
           </div>
         </div>
