@@ -4,6 +4,7 @@ import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import MiniNav from "./MiniNav";
+import { Progressbar } from "../Progressbar";
 
 const Navbar = () => {
   return (
@@ -42,7 +43,10 @@ const Navbar = () => {
 
             <div className="block md:hidden">
               <MiniNav>
-                <Button variant={"outline"} className="text-primary hover:text-primary">
+                <Button
+                  variant={"outline"}
+                  className="text-primary hover:text-primary"
+                >
                   <Menu />
                 </Button>
               </MiniNav>
@@ -50,6 +54,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      <Progressbar />
     </header>
   );
 };
