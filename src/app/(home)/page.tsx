@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import React from "react";
 import Hero from "./_components/Hero";
 import Populars from "./_components/Populars";
 import Categories from "./_components/Categories";
