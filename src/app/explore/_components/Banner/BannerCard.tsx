@@ -18,13 +18,12 @@ const BannerCard = () => {
           />
 
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-            <h1 className="text-3xl font-semibold text-white">
+            <h1 className="text-3xl font-semibold text-white leading-8 md:leading-relaxed">
               <span className="text-primary">Advertise</span> your business
             </h1>
-            <p className="text-gray-300 leading-5 mb-2">
+            <p className="text-gray-300 leading-5 md:leading-relaxed sm:text-sm text-md mb-2">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sed at
-              aperiam error corrupti eum autem nisi voluptatum officiis illo
-              maxime!
+              aperiam error corrupti eum autem nisi!
             </p>
             <Button variant={"outline"} className="bg-transparent text-white">
               <Link href={"/contact"} >
