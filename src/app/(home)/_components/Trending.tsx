@@ -72,7 +72,7 @@ const Trending = () => {
 
   return (
     <>
-      <div className="mx-auto max-w-lg text-center mb-4">
+      <div className="mx-auto text-center mb-4 max-w-lg">
         <h2 className="text-3xl font-bold sm:text-4xl">
           Trending <span className="text-primary">Professionals</span>
         </h2>
@@ -83,7 +83,7 @@ const Trending = () => {
         </p>
       </div>
 
-      <div className="mb-4 w-11/12 mx-auto">
+      <div className="mb-4 w-10/12 md:w-11/12 mx-auto">
         <Carousel
           opts={{
             align: "start",
@@ -100,18 +100,10 @@ const Trending = () => {
                 <div className="p-1">
                   <Card>
                     {
-                      /* <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-3xl font-semibold">{index + 1}</span>
-                </CardContent> */
                       <a
                         href="#"
                         className="block rounded-lg p-4 shadow-sm shadow-indigo-100"
                       >
-                        {/* <img
-                          alt=""
-                          src={pro.image}
-                          className="h-56 w-full rounded-md object-cover hover:scale-105 transition-all"
-                        /> */}
                         <Image
                           alt={pro.name}
                           src={pro.image}
@@ -181,8 +173,10 @@ const Trending = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <div className="hidden lg:block">
+            <CarouselPrevious />
+            <CarouselNext />
+          </div>
         </Carousel>
       </div>
     </>
