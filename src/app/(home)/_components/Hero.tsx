@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const Hero = () => {
@@ -10,7 +11,7 @@ const Hero = () => {
             <Image
               fill
               alt=""
-              src="/assets/work.jpg"
+              src="/assets/work.webp"
               className="absolute inset-0 h-full w-full object-cover"
             />
           </div>
@@ -28,12 +29,12 @@ const Hero = () => {
               repellat.
             </p>
 
-            <a
-              href="#"
-              className="mt-8 inline-block rounded bg-primary px-12 py-3 text-sm font-medium text-white transition hover:bg-primary/80 focus:outline-none focus:ring focus:ring-yellow-400"
+            <Link
+              href="/explore"
+              className="mt-8 inline-block rounded bg-primary px-12 py-3 text-sm font-medium text-white transition hover:bg-primary/80"
             >
               Explore now
-            </a>
+            </Link>
           </div>
         </div>
       </div>
