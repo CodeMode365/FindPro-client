@@ -1,5 +1,6 @@
-import { ClipboardPlus, DotIcon, Home } from "lucide-react";
-import React from "react";
+import PopularCard from "./PopularCard";
+import Link from "next/link";
+import { popularsdata } from "@/components/dummy/populars";
 
 const Populars = () => {
   return (
@@ -7,7 +8,7 @@ const Populars = () => {
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
         <div className="mx-auto max-w-lg text-center">
           <h2 className="text-3xl font-bold sm:text-4xl">
-           <span className="text-primary">Popular</span> Categories
+            <span className="text-primary">Popular</span> Categories
           </h2>
 
           <p className="mt-4">
@@ -18,30 +19,24 @@ const Populars = () => {
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3, 4, 5, 6].map((item) => (
-            <a
-              key={`item-${item}`}
+          {popularsdata.map((item, i) => (
+            <Link
+              key={`popular-card-item-${i}`}
               className="block rounded-xl border p-8 shadow-xl transition hover:border-primary/30 hover:shadow-primary/30"
-              href="#"
+              href={`/explore?category=${item.title.toLocaleLowerCase()}`}
             >
-              <ClipboardPlus />
-              <h2 className="mt-4 text-xl font-bold">Digital campaigns</h2>
-              <p className="mt-1 text-sm text-black/50">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut
-                quo possimus adipisci distinctio alias voluptatum blanditiis
-                laudantium.
-              </p>
-            </a>
+              <PopularCard {...item} />
+            </Link>
           ))}
         </div>
 
         <div className="mt-12 text-center">
-          <a
-            href="#"
-            className="inline-block rounded bg-primary text-white px-12 py-3 text-sm font-medium transition hover:bg-primary/80 focus:outline-none focus:ring focus:ring-yellow-400"
+          <Link
+            href="/explore"
+            className="inline-block rounded bg-primary text-white px-12 py-3 text-sm font-medium transition hover:bg-primary/80"
           >
-           View More
-          </a>
+            View More
+          </Link>
         </div>
       </div>
     </section>
