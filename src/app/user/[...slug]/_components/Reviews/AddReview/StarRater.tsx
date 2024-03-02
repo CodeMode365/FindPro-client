@@ -15,7 +15,7 @@ const StarRater = () => {
   return (
     <div className="flex">
       {Array.from({ length: 5 }).map((_, i) => (
-        <button onClick={() => rate(i + 1)}>
+        <button onClick={() => rate(i + 1)} key={"rating-star-" + i}>
           <Star
             varient={rating > i ? "filled" : "unfilled"}
             className="cursor-pointer"
