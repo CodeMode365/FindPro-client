@@ -1,29 +1,25 @@
-import React from "react";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Briefcase, Check, Star } from "lucide-react";
-import { MdVerified } from "react-icons/md";
-import Image from "next/image";
+import { Check, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 import Link from "next/link";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import VerifiedBadge from "@/components/reusable/VerifiedBadge";
+import { generatePathname } from "@/lib/helpers";
+
 const ProCard = () => {
   return (
-    <Card>
+    <Card className="md:mx-0 md:my-0">
       {
         <Link
-          href="#"
+          href={`/user/${generatePathname("John Doe")}`}
           className="block rounded-lg  shadow-sm shadow-indigo-100 overflow-hidden"
         >
           <Image
             alt={"work"}
-            src={"/assets/professionals/bill_1.jpeg"}
-            height={56}
-            width={100}
+            src={"/assets/professionals/bill_1.webp"}
+            height={400}
+            width={300}
             className="h-[12rem] w-full object-cover transition-transform hover:scale-105"
           />
 
@@ -42,14 +38,7 @@ const ProCard = () => {
                   </dd>
                 </div>
                 <div>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <span className="h-auto w-auto rounded-full ">
-                        <MdVerified className="text-primary text-2xl" />
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent className="text-primary">Verified</TooltipContent>
-                  </Tooltip>
+                  <VerifiedBadge />
                 </div>
               </div>
 
