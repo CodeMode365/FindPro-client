@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 const Login = () => {
   return (
@@ -53,9 +54,9 @@ const Login = () => {
 
         <p className="mt-4 text-sm text-gray-500 sm:mt-0">
           Don&apos;t have an account?
-          <a href="/register" className="text-gray-700 underline">
+          <Link href="/register" className="text-gray-700 underline">
             Register account
-          </a>
+          </Link>
           .
         </p>
       </div>

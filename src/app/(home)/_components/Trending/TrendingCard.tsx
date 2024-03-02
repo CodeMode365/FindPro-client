@@ -3,6 +3,8 @@ import { Briefcase, Check, Star } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import Link from "next/link";
+import { generatePathname } from "@/lib/helpers";
 
 interface iProps {
   name: string;
@@ -15,8 +17,8 @@ const TrendingCard: FC<iProps> = ({ name, image, address, role }) => {
   return (
     <Card>
       {
-        <a
-          href="#"
+        <Link
+          href={`/user/${generatePathname(name)}`}
           className="block rounded-lg p-4 shadow-sm shadow-indigo-100"
         >
           <Image
@@ -24,7 +26,7 @@ const TrendingCard: FC<iProps> = ({ name, image, address, role }) => {
             src={image}
             height={400}
             width={400}
-            className="h-[18rem] w-full rounded-md object-cover hover:scale-105"
+            className="h-[18rem] w-full rounded-md object-cover hover:scale-105 transition"
           />
 
           <div className="mt-2">
@@ -81,7 +83,7 @@ const TrendingCard: FC<iProps> = ({ name, image, address, role }) => {
               </div>
             </div>
           </div>
-        </a>
+        </Link>
       }
     </Card>
   );

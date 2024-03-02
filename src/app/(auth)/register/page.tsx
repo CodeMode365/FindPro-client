@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 const Register = () => {
   return (
@@ -11,7 +12,7 @@ const Register = () => {
           working in your backyard.
         </span>
       </div>
-      
+
       <div className="col-span-6 sm:col-span-3">
         <Label
           htmlFor="FirstName"
@@ -113,14 +114,14 @@ const Register = () => {
       <div className="col-span-6">
         <p className="text-sm text-gray-500">
           By creating an account, you agree to our
-          <a href="#" className="text-gray-700 underline">
+          <Link href="#" className="text-gray-700 underline">
             {" "}
             terms and conditions{" "}
-          </a>
+          </Link>
           and
-          <a href="#" className="text-gray-700 underline">
+          <Link href="#" className="text-gray-700 underline">
             privacy policy
-          </a>
+          </Link>
           .
         </p>
       </div>
@@ -132,9 +133,9 @@ const Register = () => {
 
         <p className="mt-4 text-sm text-gray-500 sm:mt-0">
           Already have an account?
-          <a href="/login" className="text-gray-700 underline">
+          <Link href="/login" className="text-gray-700 underline">
             Login now
-          </a>
+          </Link>
         </p>
       </div>
     </form>

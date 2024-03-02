@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -15,10 +15,10 @@ const layout = ({ children }: { children: React.ReactNode }) => {
           />
 
           <div className="hidden lg:relative lg:block lg:p-12">
-            <a className="block text-white" href="#">
+            <Link className="block text-white" href="#">
               <span className="sr-only">Home</span>
               <Image src={"/logo.svg"} alt="logo" width={120} height={120} />
-            </a>
+            </Link>
 
             <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
               Welcome to FindPro 🦑
@@ -34,14 +34,14 @@ const layout = ({ children }: { children: React.ReactNode }) => {
         <main className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6">
           <div className="max-w-xl lg:max-w-3xl">
             <div className="relative -mt-16 block lg:hidden">
-              <a
+              <Link
                 className="inline-flex size-16 items-center justify-center rounded-full bg-white text-blue-600 sm:size-20"
                 href="#"
               >
                 <span className="sr-only">Home</span>
                 <Image src={"/logo.svg"} alt="logo" width={40} height={40} className="-translate-y-2"/>
 
-              </a>
+              </Link>
 
               <h1 className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
                 Welcome to FindPro 🦑

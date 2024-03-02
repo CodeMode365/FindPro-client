@@ -53,6 +53,7 @@ const Footer = () => {
                 <a
                   className="text-gray-700 transition hover:text-gray-700/75"
                   href="#"
+                  target="_blank"
                 >
                   {fl.name}
                 </a>

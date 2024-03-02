@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { FaArrowRight, FaRegComment, FaRegEye } from "react-icons/fa";
 import Image from "next/image";
+import Link from "next/link";
 
 const GalleryCard = () => {
   return (
@@ -22,10 +23,10 @@ const GalleryCard = () => {
             The Catalyzer
           </h1>
           <div className="flex items-center flex-wrap text-sm">
-            <a className="text-primary inline-flex items-center md:mb-2 lg:mb-0">
+            <Link href="#" className="text-primary inline-flex items-center md:mb-2 lg:mb-0">
               Learn More
               <FaArrowRight className="ml-2 " />
-            </a>
+            </Link>
             <span className="text-gray-500 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-500">
               <FaRegEye className="mr-2 text-xl" />
               1.2K

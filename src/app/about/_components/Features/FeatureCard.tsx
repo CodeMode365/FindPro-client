@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowRight, Eye } from "lucide-react";
+import Link from "next/link";
 
 const FeatureCard = () => {
   return (
@@ -14,10 +15,10 @@ const FeatureCard = () => {
         Photo booth fam kinfolk cold-pressed sriracha leggings jianbing
         microdosing tousled waistcoat.
       </p>
-      <a className="text-primary inline-flex items-center">
+      <Link href="#" className="text-primary inline-flex items-center">
         Learn More
         <ArrowRight className="mx-2" />
-      </a>
+      </Link>
       <div className="text-center mt-2 leading-none flex justify-center absolute bottom-0 left-0 w-full py-4">
         <span className="text-gray-400 mr-3 inline-flex items-center leading-none text-sm pr-3 py-1 ">
           <Eye className="mx-2" />
