@@ -1,6 +1,7 @@
 import PopularCard from "./PopularCard";
 import Link from "next/link";
 import { popularsdata } from "@/components/dummy/populars";
+import { generatePathname } from "@/lib/helpers";
 
 const Populars = () => {
   return (
@@ -23,7 +24,7 @@ const Populars = () => {
             <Link
               key={`popular-card-item-${i}`}
               className="block rounded-xl border p-8 shadow-xl transition hover:border-primary/30 hover:shadow-primary/30"
-              href={`/explore?category=${item.title.toLocaleLowerCase()}`}
+              href={`/explore?category=${generatePathname(item.title)}`}
             >
               <PopularCard {...item} />
             </Link>
