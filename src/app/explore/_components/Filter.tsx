@@ -3,27 +3,62 @@
 import { dummyCategories } from "@/components/dummy/categories";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
+import { generatePathname } from "@/lib/helpers";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 
 const Filter = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeCategory, setActiveCategory] = useState("all");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const activeListItemRef = useRef<HTMLLIElement | null>(null);
+
+  useEffect(() => {
+    const urlCategory = searchParams.get("category");
+    if (urlCategory) {
+      setActiveCategory(urlCategory);
+    }
+    if (!urlCategory || urlCategory == "null") {
+      const pageNo = searchParams.get("page");
+      router.replace(`/explore?category=all&page=${pageNo}`);
+    }
+  }, [activeCategory, searchParams, router]);
+
+  useEffect(() => {
+    if (activeListItemRef.current) {
+      activeListItemRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [router]);
+
+  const setCurrentCategory = (category: string) => {
+    const pageNo = searchParams.get("page");
+    router.replace(
+      `/explore?category=${generatePathname(category)}&page=${pageNo}`
+    );
+  };
+
   return (
     <>
       <div>
         <h2 className="text-lg font-semibold w-full border-b">Categories</h2>
         <ScrollArea className="h-64">
           <ul>
-            {dummyCategories.map((category, i) => (
+            {["All", ...dummyCategories].map((category, i) => (
               <li
+                ref={
+                  activeCategory === generatePathname(category, false)
+                    ? activeListItemRef
+                    : null
+                }
                 key={"cate-item-" + i}
                 className={` px-2 rounded-sm py-1 cursor-pointer transition-colors ${
-                  i === activeIndex
+                  activeCategory === generatePathname(category, false)
                     ? "bg-primary text-white"
                     : "bg-white my-1 text-black  hover:bg-primary hover:text-white "
                 }
                 `}
-                onClick={() => setActiveIndex(i)}
+                onClick={() => setCurrentCategory(category)}
               >
                 {category}
               </li>

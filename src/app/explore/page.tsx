@@ -1,18 +1,10 @@
-import React from "react";
-import Filter from "./_components/Filter";
 import Professionals from "./_components/Professionals";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import BannerCarousel from "./_components/Banner/BannerCrousel";
+import Paginator from "./_components/Paginator";
 
 const Explore = () => {
+  
+
   return (
     <div className="w-full md:ml-4 md:p-2 ">
       <div className=" h-auto col-span-full rounded-md shadow-lg mb-4">
@@ -24,34 +16,7 @@ const Explore = () => {
       </div>
 
       <div className="col-span-full">
-        <Pagination className="mx-auto ">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                href="#"
-                isActive
-                className="text-primary border-primary"
-              >
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <Paginator />
       </div>
     </div>
   );
