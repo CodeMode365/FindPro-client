@@ -10,7 +10,7 @@ const KnowUs = () => {
           <Image
             className="object-cover object-center rounded h-full w-full blur-md"
             alt="hero"
-            src="/assets/blueish.jpg"
+            src="/assets/blueish.webp"
             height={700}
             width={600}
           />
