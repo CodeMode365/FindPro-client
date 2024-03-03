@@ -30,26 +30,28 @@ const Detailing = () => {
         </div>
 
         <table className="mb-4">
-          <tr>
-            <th className="pr-4">Age</th>
-            <td>: 22 years</td>
-          </tr>
-          <tr>
-            <th className="pr-4">Address</th>
-            <td>: Pokhara, Fewa lake</td>
-          </tr>
-          <tr>
-            <th className="pr-4">Email</th>
-            <td>: rajesh43hamal@gmail.com</td>
-          </tr>
-          <tr>
-            <th className="pr-4">Highest Education</th>
-            <td>: MBBS</td>
-          </tr>
-          <tr>
-            <th className="pr-4">Member since</th>
-            <td>: 2022</td>
-          </tr>
+          <tbody>
+            <tr className="text-left">
+              <th className="pr-4">Age</th>
+              <td>: 22 years</td>
+            </tr>
+            <tr className="text-left">
+              <th className="pr-4">Address</th>
+              <td>: Pokhara, Fewa lake</td>
+            </tr>
+            <tr className="text-left">
+              <th className="pr-4">Email</th>
+              <td>: rajesh43hamal@gmail.com</td>
+            </tr>
+            <tr className="text-left">
+              <th className="pr-4">Highest Education</th>
+              <td>: MBBS</td>
+            </tr>
+            <tr className="text-left">
+              <th className="pr-4">Member since</th>
+              <td>: 2022</td>
+            </tr>
+          </tbody>
         </table>
 
         <div className="flex justify-center">
