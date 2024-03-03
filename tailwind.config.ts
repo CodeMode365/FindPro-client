@@ -26,7 +26,7 @@ const config = {
         foreground: "hsl(var(--foreground))",
         primary: {
           // DEFAULT: "hsl(var(--primary))",
-          DEFAULT: "#442781",
+          DEFAULT: "#0ea5e9", //sky 500
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
