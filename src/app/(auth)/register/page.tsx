@@ -1,10 +1,29 @@
+"use client";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import toast from "react-hot-toast";
 import Link from "next/link";
+import { permanentRedirect } from "next/navigation";
+import { createUser } from "@/lib/server/actions/Auth";
+import { Button } from "@/components/ui/button";
+import { toastGenerator } from "@/lib/helpers";
 
 const Register = () => {
+  const submitHandler = async (formData: FormData) => {
+    const res = await createUser(formData);
+    toast.remove();
+    toastGenerator("loading");
+    if (res.success) {
+      toastGenerator("success", "Account Registered!");
+      permanentRedirect("/");
+    } else {
+      if (res.message) toastGenerator("error", res.message);
+    }
+  };
+
   return (
-    <form action="#" className="mt-8 grid grid-cols-6 gap-6">
+    <form action={submitHandler} className="mt-8 grid grid-cols-6 gap-6">
       <div className="col-span-full flex justify-center">
         <span className="text-xl text-gray-700 font-medium text-center">
           <span className="text-primary">Meet professionals</span> working
@@ -15,32 +34,34 @@ const Register = () => {
 
       <div className="col-span-6 sm:col-span-3">
         <Label
-          htmlFor="FirstName"
+          htmlFor="firstname"
           className="block text-sm font-medium text-gray-700"
         >
           First Name
         </Label>
 
         <Input
+          required
           type="text"
-          id="FirstName"
-          name="first_name"
+          id="firstname"
+          name="firstname"
           className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
         />
       </div>
 
       <div className="col-span-6 sm:col-span-3">
         <Label
-          htmlFor="LastName"
+          htmlFor="lastname"
           className="block text-sm font-medium text-gray-700"
         >
           Last Name
         </Label>
 
         <Input
+          required
           type="text"
-          id="LastName"
-          name="last_name"
+          id="lastname"
+          name="lastname"
           className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
         />
       </div>
@@ -55,6 +76,7 @@ const Register = () => {
         </Label>
 
         <Input
+          required
           type="email"
           id="Email"
           name="email"
@@ -72,6 +94,7 @@ const Register = () => {
         </Label>
 
         <Input
+          required
           type="password"
           id="Password"
           name="password"
@@ -88,6 +111,7 @@ const Register = () => {
         </Label>
 
         <Input
+          required
           type="password"
           id="PasswordConfirmation"
           name="password_confirmation"
@@ -98,6 +122,7 @@ const Register = () => {
       <div className="col-span-6">
         <Label htmlFor="MarketingAccept" className="flex gap-4">
           <Input
+            required
             type="checkbox"
             id="MarketingAccept"
             name="marketing_accept"
@@ -127,9 +152,7 @@ const Register = () => {
       </div>
 
       <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-        <button className="inline-block shrink-0 rounded-md border border-primary bg-primary px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-primary focus:outline-none focus:ring active:text-blue-500">
-          Create an account
-        </button>
+        <Button type="submit">Create an account</Button>
 
         <p className="mt-4 text-sm text-gray-500 sm:mt-0">
           Already have an account?
