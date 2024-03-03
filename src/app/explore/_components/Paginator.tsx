@@ -22,13 +22,15 @@ const Paginator = () => {
   useEffect(() => {
     const urlCategory = searchParams.get("category");
     const urlPageNo = searchParams.get("page");
+    
     if ((!urlPageNo || urlPageNo == "0") && urlCategory) {
       router.replace(`/explore?category=${urlCategory}&page=1`);
-      setCurrentPage(1)
+      setCurrentPage(1);
     } else if (urlPageNo) {
       router.replace(`/explore?category=${urlCategory}&page=${currentPage}`);
     }
-  }, [searchParams, currentPage]);
+  }, [searchParams, currentPage, router]);
+
   return (
     <Pagination className="mx-auto ">
       <PaginationContent>
