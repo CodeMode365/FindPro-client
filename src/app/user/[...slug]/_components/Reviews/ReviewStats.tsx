@@ -39,7 +39,7 @@ const ReviewStats = () => {
               </a>
               <div className="w-3/4 h-3 mx-4 bg-gray-200 rounded-lg ">
                 <div
-                  className={`h-3 bg-yellow-300 rounded-lg`}
+                  className={`h-3 bg-yellow-400 rounded-lg`}
                   style={{ width: `${perc}%` }}
                 />
               </div>
