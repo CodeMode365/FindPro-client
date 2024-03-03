@@ -11,7 +11,7 @@ const Stats = () => {
           <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
             App <span className="text-primary">Stats</span>
           </h1>
-          <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
+          <p className="lg:w-2/3 mx-auto leading-relaxed text-base text-gray-600">
             Our platform is growing gradually every day. Lorem ipsum dolor sit
             amet consectetur, adipisicing elit. Eaque soluta eligendi
             repudiandae necessitatibus magnam placeat?
