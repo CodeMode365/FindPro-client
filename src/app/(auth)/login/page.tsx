@@ -1,6 +1,5 @@
 "use client";
 
-import toast from "react-hot-toast";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/input";
@@ -9,9 +8,8 @@ import { Label } from "@/components/ui/label";
 
 import { useState } from "react";
 import { permanentRedirect } from "next/navigation";
-import { createUser, userLogin } from "@/lib/server/actions/Auth";
+import {  userLogin } from "@/lib/server/actions/Auth";
 import { toastGenerator } from "@/lib/helpers";
-import { error } from "console";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -24,7 +22,8 @@ const Login = () => {
       toastGenerator("success", "Login successful!");
       permanentRedirect("/");
     } else {
-      if (res.message) toastGenerator("error", res.message);
+      console.log("Login error",res)
+      toastGenerator("error", res.message);
     }
     setLoading(false);
   };

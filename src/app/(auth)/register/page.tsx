@@ -18,7 +18,7 @@ const Register = () => {
       toastGenerator("success", "Account Registered!");
       permanentRedirect("/");
     } else {
-      if (res.message) toastGenerator("error", res.message);
+      toastGenerator("error", res.message);
     }
   };
 
