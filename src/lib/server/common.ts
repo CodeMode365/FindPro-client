@@ -1,14 +1,17 @@
-import { actionResponseType } from "@/lib/types/response";
+import {
+  actionResponseType,
+  errorResponseType,
+  successResponseType,
+} from "@/lib/types/response";
 
 export const generateErrorRes = (
   message: string = `Something went wrong! \n Please try again later!`
-): actionResponseType => ({
+): errorResponseType => ({
   success: false,
   message,
-  data: undefined,
 });
 
-export const generateSuccessRes = (data: any): actionResponseType => ({
+export const generateSuccessRes = <T>(data: T): successResponseType<T> => ({
   success: true,
   data,
 });
@@ -19,8 +22,9 @@ export const asyncHandler = (
   return async (...args: any[]) => {
     try {
       return await fn(...args);
-    } catch (error) {
-      return generateErrorRes(String(error));
+    } catch (error: any) {
+      console.log(error.message);
+      return generateErrorRes(String(error.message));
     }
   };
 };
