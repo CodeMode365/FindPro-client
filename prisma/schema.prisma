@@ -24,8 +24,8 @@ model User {
   registrationDate   DateTime           @default(now())
   lastLoginDate      DateTime
   verificationStatus VerificationStatus @default(UNVERIFIED)
-  verificationToken  String?
-  resetPasswordToken String?
+  verificationCode   String?            @db.VarChar(255)
+  resetPasswordToken String?            @db.VarChar(255)
   Session            Session[]
 
   createAt DateTime @default(now())
