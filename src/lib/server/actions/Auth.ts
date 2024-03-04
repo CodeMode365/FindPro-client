@@ -6,11 +6,12 @@ import {
   generateErrorRes,
   generateSuccessRes,
 } from "@/lib/server/common";
-import { actionResponseType } from "@/lib/types/response";
-import { loginSchema, userSchema } from "@/lib/server/Schemas";
-import { compareWithHash, generateHash } from "../serverUtils/bcrypt.utils";
-import { createSession } from "./Session";
 import _ from "lodash";
+import { actionResponseType } from "@/lib/types/response";
+import { userSchema } from "@/lib/server/Schemas";
+import { compareWithHash, generateHash } from "../serverUtils/bcrypt.utils";
+import { createSession } from "@/lib/server/services/session.service";
+import { sendVerificationCode } from "@/lib/server/services/mail.service";
 
 export const userLogin = asyncHandler(
   async (formData: FormData): Promise<actionResponseType> => {
@@ -18,14 +19,9 @@ export const userLogin = asyncHandler(
       email: string;
       password: string;
     };
-    const validatedFields = loginSchema.safeParse({
-      email,
-      password,
-    });
+    const validatedFields = userSchema.safeParse({ email, password });
     if (!validatedFields.success) {
-      return generateErrorRes(
-        validatedFields.error.flatten().formErrors.toString()
-      );
+      return generateErrorRes("Fields Validatin Error!");
     }
     const findUser = await prisma.user.findFirst({
       where: {
@@ -45,13 +41,10 @@ export const userLogin = asyncHandler(
     if (!(await compareWithHash(password, findUser.password))) {
       return generateErrorRes("Password didn't match!");
     }
-    const { data, message, success } = await createSession(findUser.id);
-    if (!success) {
-      return generateErrorRes(message);
-    }
+    const session = await createSession(findUser.id);
     return generateSuccessRes({
       user: _.omit(findUser, ["password"]),
-      token: data.token,
+      token: session.token,
     });
   }
 );
@@ -98,14 +91,16 @@ export const createUser = asyncHandler(
         lastname: true,
       },
     });
+    if (!newUser) return generateErrorRes("User registration failed!");
+    await sendVerificationCode(newUser.id);
+    // const session = await createSession(newUser.id);
+    // if (!session.success) return generateErrorRes(session.message);
+    return generateSuccessRes({ user: newUser });
+  }
+);
 
-    if (!newUser) {
-      return generateErrorRes("User registration failed!");
-    }
-    const { data, message, success } = await createSession(newUser.id);
-    if (!success) {
-      return generateErrorRes(message);
-    }
-    return generateSuccessRes({ user: newUser, token: data.token });
+export const verifyUser = asyncHandler(
+  async (userId: string, code: string): Promise<actionResponseType> => {
+    return generateErrorRes();
   }
 );
