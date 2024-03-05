@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toastGenerator } from "@/lib/helpers";
 import { permanentRedirect, useSearchParams } from "next/navigation";
-import { verifyEmail } from "@/lib/server/actions/Auth";
+import { resendVerificationCode, verifyEmail } from "@/lib/server/actions/Auth";
 
 const EmailVerification = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const inputRefs = useRef<HTMLInputElement[]>([]);
   const searchParams = useSearchParams();
 
@@ -22,12 +23,25 @@ const EmailVerification = () => {
       code += entries[key];
     }
     if (code.length !== 6) {
-      toastGenerator("error", "Error code length!");
+      setIsLoading(false);
+      return toastGenerator("error", "Invalid code!");
     }
-    const res = await verifyEmail(searchParams.get("email"), code);
+    const res = await verifyEmail(userEmail, code);
     if (res.success) {
       toastGenerator("success", "Email verified!");
       return permanentRedirect("/");
+    } else {
+      toastGenerator("error", res.message);
+    }
+    setIsLoading(false);
+  };
+
+  const resendCode = async () => {
+    setIsLoading(true);
+    toastGenerator("loading", "Sending code!");
+    const res = await resendVerificationCode(userEmail);
+    if (res.success) {
+      toastGenerator("success", "Code sent!");
     } else {
       toastGenerator("error", res.message);
     }
@@ -73,6 +87,16 @@ const EmailVerification = () => {
     };
   }, []);
 
+  useLayoutEffect(() => {
+    const email = searchParams.get("email");
+    if (email) {
+      setUserEmail(email);
+    } else {
+      toastGenerator("error","Missing email!")
+      permanentRedirect("/register");
+    }
+  }, [searchParams.get("email")]);
+
   return (
     <form
       action={submitHandler}
@@ -90,9 +114,18 @@ const EmailVerification = () => {
           Enter your verification code!
         </h1>
         <p>
-          <span className="text-primary">Check your email</span> for the
-          verification code.
+          Check your
+          <a
+            className="hover:underline text-primary "
+            href="https://gmail.com"
+            target="_blank"
+          >
+            {" "}
+            email
+          </a>{" "}
+          for the verification code.
         </p>
+        <p className="text-primary">{searchParams.get("email")}</p>
       </div>
       <div className="flex">
         {Array.from({ length: 6 }).map((_, id) => (
@@ -114,7 +147,7 @@ const EmailVerification = () => {
         ))}
       </div>
       <div className="w-full flex justify-between">
-        <Button variant={"outline"} disabled={isLoading}>
+        <Button variant={"outline"} disabled={isLoading} onClick={resendCode}>
           Resend Code
         </Button>
         <Button type="submit" disabled={isLoading}>
