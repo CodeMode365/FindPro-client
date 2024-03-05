@@ -33,6 +33,7 @@ export const userLogin = asyncHandler(
         firstname: true,
         lastname: true,
         password: true,
+        verificationStatus: true,
       },
     });
     if (!findUser) {
@@ -40,6 +41,13 @@ export const userLogin = asyncHandler(
     }
     if (!(await compareWithHash(password, findUser.password))) {
       return generateErrorRes("Password didn't match!");
+    }
+    if (findUser.verificationStatus == "UNVERIFIED") {
+      await sendVerificationCode(findUser.id);
+      return generateSuccessRes({
+        message: "Verify your email!",
+        email: findUser.email,
+      });
     }
     const session = await createSession(findUser.id);
     return generateSuccessRes({
@@ -93,14 +101,45 @@ export const createUser = asyncHandler(
     });
     if (!newUser) return generateErrorRes("User registration failed!");
     await sendVerificationCode(newUser.id);
-    // const session = await createSession(newUser.id);
-    // if (!session.success) return generateErrorRes(session.message);
-    return generateSuccessRes({ user: newUser });
+    return generateSuccessRes({
+      message: "Verify your email!",
+      email: newUser.email,
+    });
   }
 );
 
-export const verifyUser = asyncHandler(
-  async (userId: string, code: string): Promise<actionResponseType> => {
-    return generateErrorRes();
+export const verifyEmail = asyncHandler(
+  async (email: string, code: string): Promise<actionResponseType> => {
+    const validatedFields = userSchema.safeParse({ email });
+    if (!validatedFields.success) {
+      return generateErrorRes("Fields Validatin Error!");
+    }
+    const findUser = await prisma.user.findFirst({
+      where: { email, verificationCode: code },
+    });
+    if (!findUser) return generateErrorRes("Email verification failed!");
+    if (code.length !== 6)
+      return generateErrorRes("Invalid verification code!");
+    await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        verificationStatus: "VERIFIED",
+        verificationCode: null,
+      },
+    });
+    const session = await createSession(findUser.id);
+    if (!session) return generateErrorRes("Session generation failed!");
+    return generateSuccessRes({
+      user: _.pick(findUser, [
+        "firstname",
+        "lastname",
+        "id",
+        "email",
+        "profilePicture",
+      ]),
+      token: _.pick(session, ["token"]),
+    });
   }
 );
