@@ -8,15 +8,23 @@ import { permanentRedirect } from "next/navigation";
 import { createUser } from "@/lib/server/actions/Auth";
 import { Button } from "@/components/ui/button";
 import { toastGenerator } from "@/lib/helpers";
+import { Info } from "lucide-react";
 
 const Register = () => {
   const submitHandler = async (formData: FormData) => {
     const res = await createUser(formData);
-    toast.remove();
     toastGenerator("loading");
     if (res.success) {
+      if (res.data.message && res.data.message == "Verify your email!") {
+        toast.remove();
+        toast("Verify your email!", {
+          icon: <Info className="text-primary" />,
+        });
+        return permanentRedirect(
+          `/register/verify-email?email=${res.data.email}`
+        );
+      }
       toastGenerator("success", "Account Registered!");
-      permanentRedirect("/");
     } else {
       toastGenerator("error", res.message);
     }
