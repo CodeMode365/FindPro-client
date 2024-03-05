@@ -1,38 +1,51 @@
 "use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import { toastGenerator } from "@/lib/helpers";
+import { permanentRedirect, useSearchParams } from "next/navigation";
+import { verifyEmail } from "@/lib/server/actions/Auth";
 
-const VerifyEmail = () => {
+const EmailVerification = () => {
   const [isLoading, setIsLoading] = useState(true);
   const inputRefs = useRef<HTMLInputElement[]>([]);
+  const searchParams = useSearchParams();
 
-  const handleSubmit = () => {
+  const submitHandler = async (formData: FormData) => {
     setIsLoading(true);
-    return new Promise((res, rej) =>
-      setTimeout(() => {
-        console.log("loaded");
-        setIsLoading(false);
-        return res;
-      }, 3000)
-    );
+    toastGenerator("loading", "Verifying your code!");
+    const entries = Object.fromEntries(formData.entries());
+    let code = "";
+    for (let key in entries) {
+      code += entries[key];
+    }
+    if (code.length !== 6) {
+      toastGenerator("error", "Error code length!");
+    }
+    const res = await verifyEmail(searchParams.get("email"), code);
+    if (res.success) {
+      toastGenerator("success", "Email verified!");
+      return permanentRedirect("/");
+    } else {
+      toastGenerator("error", res.message);
+    }
+    setIsLoading(false);
   };
-
-  const submitBtn = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     setIsLoading(false);
     const handleInput = (index: number) => (event: Event) => {
       const input = event.target as HTMLInputElement;
-      input.value = input.value.slice(0, 1);
-      if (input.value.length == input.maxLength) {
+      if (input.value.length > 1) input.value = input.value.slice(1, 2);
+      else input.value = input.value.slice(0, 1);
+      if (input.value.length >= input.maxLength) {
         const nextIndex = index + 1;
-        if (nextIndex < inputRefs.current.length) {
+        if (nextIndex < 6) {
           inputRefs.current[nextIndex].focus();
         } else {
           input.blur();
-          submitBtn.current?.click();
         }
       }
     };
@@ -50,18 +63,21 @@ const VerifyEmail = () => {
     inputRefs.current.forEach((ref, i) => {
       ref.addEventListener("input", handleInput(i));
       ref.addEventListener("keydown", handleClear(i));
-    }, []);
+    });
 
     return () => {
       inputRefs.current.forEach((ref, i) => {
-        ref.addEventListener("input", handleInput(i));
-        ref.addEventListener("keydown", handleClear(i));
+        ref.removeEventListener("input", handleInput(i));
+        ref.removeEventListener("keydown", handleClear(i));
       });
     };
   }, []);
 
   return (
-    <div className="mt-8 flex flex-col items-center space-y-10 md:-my-20">
+    <form
+      action={submitHandler}
+      className="mt-8 flex flex-col items-center space-y-10 md:-my-20"
+    >
       <div className="-mb-4">
         <Image src={"/logo.svg"} alt="logo" width={120} height={120} />
         <h1 className="text-2xl text-primary text-center my-2 font-semibold">
@@ -85,7 +101,10 @@ const VerifyEmail = () => {
             key={`codeInput-${id + 1}`}
             id={`codeInput-${id + 1}`}
             name={`codeInput-${id + 1}`}
-            ref={(ele: HTMLInputElement) => inputRefs.current.push(ele)}
+            ref={(ele: HTMLInputElement) => {
+              if (inputRefs.current.length < 6)
+                return inputRefs.current.push(ele);
+            }}
             disabled={isLoading}
             className="mx-1 md:mx-2 h-8 w-8 text-sm sm:h-12 sm:w-12 md:h-16 md:w-16 border-primary md:text-4xl no-spinners text-center"
             autoFocus={id == 0}
@@ -98,12 +117,12 @@ const VerifyEmail = () => {
         <Button variant={"outline"} disabled={isLoading}>
           Resend Code
         </Button>
-        <Button ref={submitBtn} onClick={handleSubmit} disabled={isLoading}>
+        <Button type="submit" disabled={isLoading}>
           Verify
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 
-export default VerifyEmail;
+export default EmailVerification;
