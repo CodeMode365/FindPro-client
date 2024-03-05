@@ -6,7 +6,7 @@ import {
   generateErrorRes,
   generateSuccessRes,
 } from "@/lib/server/common";
-import _ from "lodash";
+import _, { find } from "lodash";
 import { actionResponseType } from "@/lib/types/response";
 import { userSchema } from "@/lib/server/Schemas";
 import { compareWithHash, generateHash } from "../serverUtils/bcrypt.utils";
@@ -141,5 +141,16 @@ export const verifyEmail = asyncHandler(
       ]),
       token: _.pick(session, ["token"]),
     });
+  }
+);
+
+export const resendVerificationCode = asyncHandler(
+  async (email: string): Promise<actionResponseType> => {
+    const findUser = await prisma.user.findFirst({
+      where: { email },
+    });
+    if (!findUser) return generateErrorRes("Please register your account!");
+    await sendVerificationCode(findUser.id);
+    return generateSuccessRes(null);
   }
 );
