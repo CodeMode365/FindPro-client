@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-
+import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-
-import { useState } from "react";
+import { Info } from "lucide-react";
+import { useEffect, useState } from "react";
 import { permanentRedirect } from "next/navigation";
-import {  userLogin } from "@/lib/server/actions/Auth";
+import { userLogin } from "@/lib/server/actions/Auth";
 import { toastGenerator } from "@/lib/helpers";
 
 const Login = () => {
@@ -19,14 +19,27 @@ const Login = () => {
     toastGenerator("loading");
     const res = await userLogin(formData);
     if (res.success) {
+      if (res.data.message && res.data.message == "Verify your email!") {
+        toast.remove();
+        toast("Verify your email!", {
+          icon: <Info className="text-primary" />,
+        });
+        return permanentRedirect(
+          `/register/verify-email?email=${res.data.email}`
+        );
+      }
       toastGenerator("success", "Login successful!");
-      permanentRedirect("/");
+      return permanentRedirect("/");
     } else {
-      console.log("Login error",res)
       toastGenerator("error", res.message);
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    setLoading(false);
+  }),
+    [];
 
   return (
     <form action={handleSubmit} className="mt-8 grid grid-cols-6 gap-6">
@@ -75,13 +88,6 @@ const Login = () => {
       </div>
 
       <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-        {/* <button
-          disabled={loading}
-          type="submit"
-          className="inline-block shrink-0 rounded-md border border-primary bg-primary px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-primary/80 focus:outline-none focus:ring active:text-primary"
-        >
-          Login
-        </button> */}
         <Button disabled={loading} type="submit" aria-disabled={loading}>
           Login
         </Button>
