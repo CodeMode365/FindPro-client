@@ -63,15 +63,6 @@ const VerifyEmail = () => {
   }, []);
 
   return (
-    <>
-      <style>
-        {`
-    .no-spinners::-webkit-outer-spin-button,
-    .no-spinners::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-    `}
-      </style>
       <div className="mt-8 flex flex-col items-center space-y-10 md:-my-20">
         <div className="-mb-4">
           <Image src={"/logo.svg"} alt="logo" width={120} height={120} />
@@ -114,7 +105,6 @@ const VerifyEmail = () => {
           </Button>
         </div>
       </div>
-    </>
   );
 };
 
