@@ -17,26 +17,21 @@ const Register = () => {
   const submitHandler = async (formData: FormData) => {
     startLoading();
     toastGenerator("loading", "Please wait!");
-    try {
-      const res = await createUser(formData);
-      if (res.success) {
-        if (res.data.message && res.data.message == "Verify your email!") {
-          toast("Verify your email!", {
-            icon: <Info className="text-primary" />,
-          });
-          return permanentRedirect(
-            `/register/verify-email?email=${res.data.email}`
-          );
-        }
-        toastGenerator("success", "Account Registered!");
-      } else {
-        toastGenerator("error", res.message);
+    const res = await createUser(formData);
+    if (res.success) {
+      if (res.data.message && res.data.message == "Verify your email!") {
+        toast("Verify your email!", {
+          icon: <Info className="text-primary" />,
+        });
+        return permanentRedirect(
+          `/register/verify-email?email=${res.data.email}`
+        );
       }
-    } catch (error: any) {
-      toastGenerator("error", error.message);
-    } finally {
-      stopLoading();
+      toastGenerator("success", "Account Registered!");
+    } else {
+      toastGenerator("error", res.message);
     }
+    stopLoading();
   };
 
   useEffect(() => {
