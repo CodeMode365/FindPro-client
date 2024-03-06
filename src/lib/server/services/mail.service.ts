@@ -2,6 +2,7 @@ import prisma from "@/lib/server/db";
 import nodemailer from "nodemailer";
 import { generateCode } from "./code.service";
 import { headers } from "next/headers";
+import { generateHash } from "@/lib/server/serverUtils/bcrypt.utils";
 
 export const verifyEmail = async (code: string, userId: string) => {
   const findUser = await prisma.user.findFirst({
@@ -18,13 +19,15 @@ export const verifyEmail = async (code: string, userId: string) => {
 };
 
 export const sendVerificationCode = async (userId: string) => {
+  const verification_code = generateCode();
+  const hashedCode = await generateHash(verification_code);
   const user = await prisma.user.update({
     where: { id: userId },
-    data: { verificationCode: generateCode() },
+    data: { verificationCode: hashedCode },
     select: { email: true, verificationCode: true },
   });
   const { email, verificationCode } = user;
-  if (verificationCode) return await sendEmail(email, verificationCode);
+  if (verificationCode) return await sendEmail(email, verification_code);
   throw Error("Error generating verification code!");
 };
 

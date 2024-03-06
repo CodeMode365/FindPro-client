@@ -111,14 +111,20 @@ export const createUser = asyncHandler(
 export const verifyEmail = asyncHandler(
   async (email: string, code: string): Promise<actionResponseType> => {
     const validatedFields = userSchema.safeParse({ email });
-    if (!validatedFields.success) {
-      return generateErrorRes("Fields Validatin Error!");
-    }
-    const findUser = await prisma.user.findFirst({
-      where: { email, verificationCode: code },
-    });
-    if (!findUser) return generateErrorRes("Email verification failed!");
     if (code.length !== 6)
+      return generateErrorRes("Invalid verification code!");
+    if (!validatedFields.success)
+      return generateErrorRes("Fields Validatin Error!");
+    const findUser = await prisma.user.findFirst({
+      where: { email },
+    });
+    if (!findUser) return generateErrorRes("Email not registered!");
+    if (findUser.verificationStatus == "VERIFIED")
+      return generateSuccessRes("Email already verified!");
+    if (
+      !findUser.verificationCode ||
+      !(await compareWithHash(code, findUser.verificationCode))
+    )
       return generateErrorRes("Invalid verification code!");
     await prisma.user.update({
       where: {

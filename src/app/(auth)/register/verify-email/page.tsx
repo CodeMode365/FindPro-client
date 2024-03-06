@@ -7,15 +7,16 @@ import { Input } from "@/components/ui/input";
 import { toastGenerator } from "@/lib/helpers";
 import { permanentRedirect, useSearchParams } from "next/navigation";
 import { resendVerificationCode, verifyEmail } from "@/lib/server/actions/Auth";
+import { useLoadingStore } from "@/lib/states/loadingStore";
 
 const EmailVerification = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const { isLoading, startLoading, stopLoading } = useLoadingStore();
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const inputRefs = useRef<HTMLInputElement[]>([]);
   const searchParams = useSearchParams();
 
   const submitHandler = async (formData: FormData) => {
-    setIsLoading(true);
+    startLoading();
     toastGenerator("loading", "Verifying your code!");
     const entries = Object.fromEntries(formData.entries());
     let code = "";
@@ -23,21 +24,22 @@ const EmailVerification = () => {
       code += entries[key];
     }
     if (code.length !== 6) {
-      setIsLoading(false);
+      stopLoading();
       return toastGenerator("error", "Invalid code!");
     }
     const res = await verifyEmail(userEmail, code);
     if (res.success) {
+      stopLoading();
       toastGenerator("success", "Email verified!");
       return permanentRedirect("/");
     } else {
       toastGenerator("error", res.message);
     }
-    setIsLoading(false);
+    stopLoading();
   };
 
   const resendCode = async () => {
-    setIsLoading(true);
+    startLoading();
     toastGenerator("loading", "Sending code!");
     const res = await resendVerificationCode(userEmail);
     if (res.success) {
@@ -45,11 +47,11 @@ const EmailVerification = () => {
     } else {
       toastGenerator("error", res.message);
     }
-    setIsLoading(false);
+    stopLoading();
   };
 
   useEffect(() => {
-    setIsLoading(false);
+    stopLoading();
     const handleInput = (index: number) => (event: Event) => {
       const input = event.target as HTMLInputElement;
       if (input.value.length > 1) input.value = input.value.slice(1, 2);
@@ -83,6 +85,7 @@ const EmailVerification = () => {
       inputRefs.current.forEach((ref, i) => {
         ref.removeEventListener("input", handleInput(i));
         ref.removeEventListener("keydown", handleClear(i));
+        startLoading();
       });
     };
   }, []);
@@ -92,7 +95,7 @@ const EmailVerification = () => {
     if (email) {
       setUserEmail(email);
     } else {
-      toastGenerator("error","Missing email!")
+      toastGenerator("error", "Missing email!");
       permanentRedirect("/register");
     }
   }, [searchParams.get("email")]);

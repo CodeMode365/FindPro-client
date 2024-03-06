@@ -9,26 +9,39 @@ import { createUser } from "@/lib/server/actions/Auth";
 import { Button } from "@/components/ui/button";
 import { toastGenerator } from "@/lib/helpers";
 import { Info } from "lucide-react";
+import { useLoadingStore } from "@/lib/states/loadingStore";
+import { useEffect } from "react";
 
 const Register = () => {
+  const { isLoading, startLoading, stopLoading } = useLoadingStore();
   const submitHandler = async (formData: FormData) => {
-    const res = await createUser(formData);
-    toastGenerator("loading");
-    if (res.success) {
-      if (res.data.message && res.data.message == "Verify your email!") {
-        toast.remove();
-        toast("Verify your email!", {
-          icon: <Info className="text-primary" />,
-        });
-        return permanentRedirect(
-          `/register/verify-email?email=${res.data.email}`
-        );
+    startLoading();
+    toastGenerator("loading", "Please wait!");
+    try {
+      const res = await createUser(formData);
+      if (res.success) {
+        if (res.data.message && res.data.message == "Verify your email!") {
+          toast("Verify your email!", {
+            icon: <Info className="text-primary" />,
+          });
+          return permanentRedirect(
+            `/register/verify-email?email=${res.data.email}`
+          );
+        }
+        toastGenerator("success", "Account Registered!");
+      } else {
+        toastGenerator("error", res.message);
       }
-      toastGenerator("success", "Account Registered!");
-    } else {
-      toastGenerator("error", res.message);
+    } catch (error: any) {
+      toastGenerator("error", error.message);
+    } finally {
+      stopLoading();
     }
   };
+
+  useEffect(() => {
+    stopLoading();
+  }, []);
 
   return (
     <form action={submitHandler} className="mt-8 grid grid-cols-6 gap-6">
@@ -160,7 +173,9 @@ const Register = () => {
       </div>
 
       <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-        <Button type="submit">Create an account</Button>
+        <Button type="submit" disabled={isLoading}>
+          Create an account
+        </Button>
 
         <p className="mt-4 text-sm text-gray-500 sm:mt-0">
           Already have an account?
