@@ -5,6 +5,7 @@ import Navbar from "@/components/reusable/Navbar";
 import Footer from "@/components/reusable/Footer";
 import TopScroller from "@/components/reusable/TopScroller";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "react-hot-toast";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${outfit.className} max-w-screen-xl mx-auto`}>
         <Navbar />
+        <Toaster />
         <TooltipProvider>
           <TopScroller />
           <main>{children}</main>
