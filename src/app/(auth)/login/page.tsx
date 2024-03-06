@@ -6,16 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Info } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { permanentRedirect } from "next/navigation";
 import { userLogin } from "@/lib/server/actions/Auth";
 import { toastGenerator } from "@/lib/helpers";
+import { useLoadingStore } from "@/lib/states/loadingStore";
 
 const Login = () => {
-  const [loading, setLoading] = useState(false);
+  const { isLoading, stopLoading, startLoading } = useLoadingStore();
 
   const handleSubmit = async (formData: FormData) => {
-    setLoading(true);
+    startLoading();
     toastGenerator("loading");
     const res = await userLogin(formData);
     if (res.success) {
@@ -28,18 +29,19 @@ const Login = () => {
           `/register/verify-email?email=${res.data.email}`
         );
       }
+      stopLoading();
       toastGenerator("success", "Login successful!");
       return permanentRedirect("/");
     } else {
       toastGenerator("error", res.message);
     }
-    setLoading(false);
+    stopLoading();
   };
 
   useEffect(() => {
-    setLoading(false);
-  }),
-    [];
+    stopLoading();
+    return () => startLoading();
+  }, []);
 
   return (
     <form action={handleSubmit} className="mt-8 grid grid-cols-6 gap-6">
@@ -88,7 +90,7 @@ const Login = () => {
       </div>
 
       <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-        <Button disabled={loading} type="submit" aria-disabled={loading}>
+        <Button disabled={isLoading} type="submit" aria-disabled={isLoading}>
           Login
         </Button>
 
