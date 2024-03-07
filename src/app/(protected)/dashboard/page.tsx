@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
-  )
-}
+    <div className="col-span-12">
+      <div>Dashboard page</div>
+    </div>
+  );
+};
 
-export default Dashboard
+export default Dashboard;
