@@ -16,13 +16,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  Component,
 }: Readonly<{
   children: React.ReactNode;
+  Component: any;
 }>) {
+  const showLayout = Component.layout !== false;
   return (
     <html lang="en">
       <body className={`${outfit.className} max-w-screen-xl mx-auto`}>
-        <Navbar />
+        {showLayout && <Navbar />}
         <Toaster />
         <TooltipProvider>
           <TopScroller />
