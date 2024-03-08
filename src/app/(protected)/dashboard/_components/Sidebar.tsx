@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Activity, Home, Settings } from "lucide-react";
 import { MdAnalytics, MdSupport } from "react-icons/md";
 
@@ -12,8 +13,12 @@ const Sidebar = () => {
   ];
   return (
     <aside className="p-4 h-full bg-gray-100 border-r-2 border-gary-100">
-      <div className="py-4 border-b  border-black/40">
-        <h1>Sidebar</h1>
+      <div className="py-4 border-b border-black/40 flex items-center">
+        <a className="block text-primary" href="/">
+          <span className="sr-only">Home</span>
+          <Image src={"/logo.svg"} alt="logo" width={40} height={40} />
+        </a>
+        <span className="ml-2 text-primary font-semibold">FindPro dev</span>
       </div>
       <nav>
         <div>
@@ -22,7 +27,7 @@ const Sidebar = () => {
             {navLinks.map((navLink, i) => {
               const { name, icon: Icon, path } = navLink;
               return (
-                <li className="w-full text-gray-700">
+                <li key={"db-link-x-" + i} className="w-full text-gray-700">
                   <Link
                     href={"#"}
                     className="w-full flex items-center jus py-1 px-2 rounded-sm hover:bg-primary hover:text-white transition"
@@ -41,7 +46,7 @@ const Sidebar = () => {
             {navLinks.map((navLink, i) => {
               const { name, icon: Icon, path } = navLink;
               return (
-                <li className="w-full">
+                <li className="w-full" key={"db-link-x-" + i}>
                   <Link
                     href={"#"}
                     className="w-full flex items-center jus py-1 px-2 rounded-sm hover:bg-primary hover:text-white transition"
