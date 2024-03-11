@@ -17,7 +17,7 @@ const Settings = () => {
           </TabsList>
           <TabsContent
             value="general"
-            className="w-full grid grid-cols-12 gap-4 p-2 my-4 px-6"
+            className="w-full grid grid-cols-12 gap-4 p-2 my-4 md:px-6"
           >
             <GeneralTab />
           </TabsContent>

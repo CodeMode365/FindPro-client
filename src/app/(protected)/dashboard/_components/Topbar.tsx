@@ -6,7 +6,7 @@ import { MdNotificationAdd, MdNotifications } from "react-icons/md";
 const Topbar = () => {
   return (
     <div className=" col-span-12 h-14 w-full border-b border-gray-300 flex items-center justify-end text-gray-700">
-      <div className="flex mx-8 items-center">
+      <div className="flex mx-4 md:mx-8 items-center">
         <span className="mx-2 cursor-pointer">
           <MdNotifications size={24} />
         </span>

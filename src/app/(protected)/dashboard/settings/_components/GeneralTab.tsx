@@ -57,10 +57,10 @@ const GeneralTab = () => {
   return (
     <>
       <form
-        className="col-span-full grid grid-cols-12"
+        className="col-span-full grid grid-cols-12  space-y-4 md:space-y-0"
         //   action={updateUserInfo}
       >
-        <Card className="col-span-4 h-80 mr-4">
+        <Card className="col-span-12 md:col-span-4 h-80 mr-4">
           <CardContent className="">
             <Avatar className="mx-auto mt-10 shadow-md h-32 w-32 ">
               <AvatarImage src="https://github.com/shadcn.png" />
@@ -89,7 +89,7 @@ const GeneralTab = () => {
           </CardContent>
         </Card>
 
-        <Card className="col-span-8">
+        <Card className="col-span-12 md:col-span-8">
           <CardHeader>
             <CardTitle>General Info</CardTitle>
             <CardDescription>
@@ -98,7 +98,7 @@ const GeneralTab = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="grid grid-cols-2 gap-4 ">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
               <div className="space-y-1 col-span-1">
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -120,7 +120,7 @@ const GeneralTab = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 ">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
               <div className="space-y-1 col-span-1">
                 <Label htmlFor="phone">Phone no.</Label>
                 <Input
@@ -140,7 +140,7 @@ const GeneralTab = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 ">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
               <div className="space-y-1 col-span-1">
                 <Label htmlFor="country">Country</Label>
                 <Input
@@ -160,7 +160,7 @@ const GeneralTab = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 ">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
               <div className="space-y-1 col-span-1">
                 <Label htmlFor="city">City</Label>
                 <Input
@@ -180,7 +180,7 @@ const GeneralTab = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 ">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
               <Textarea
                 id="bio"
                 name="bio"

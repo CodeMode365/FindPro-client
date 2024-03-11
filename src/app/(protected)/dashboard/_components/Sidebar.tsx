@@ -1,19 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Activity, Home, Settings } from "lucide-react";
+import { Activity, Home, Settings, User } from "lucide-react";
 import { MdAnalytics, MdSupport } from "react-icons/md";
 
 const Sidebar = () => {
   const navLinks = [
     { name: "Dashboard", path: "/", icon: Home },
+    { name: "Users", path: "/users", icon: User },
     { name: "Analytics", path: "/analytics", icon: MdAnalytics },
     { name: "Support Center", path: "/support", icon: MdSupport },
     { name: "Activity", path: "/activity", icon: Activity },
     { name: "Settings", path: "/settings", icon: Settings },
   ];
   return (
-    <aside className="p-4 h-full bg-gray-100 border-r-2 border-gary-100">
-      <div className="py-4 border-b border-black/40 flex items-center">
+    <aside className="p-4 h-full border-r border-gary- bg-white min-h-screen absolute -translate-x-full md:relative md:translate-x-0">
+      <div className="py-2 border-b border-black/10 flex items-center">
         <a className="block text-primary" href="/">
           <span className="sr-only">Home</span>
           <Image src={"/logo.svg"} alt="logo" width={40} height={40} />
@@ -29,7 +30,7 @@ const Sidebar = () => {
               return (
                 <li key={"db-link-x-" + i} className="w-full text-gray-700">
                   <Link
-                    href={"#"}
+                    href={"/dashboard/" + path}
                     className="w-full flex items-center jus py-1 px-2 rounded-sm hover:bg-primary hover:text-white transition"
                   >
                     <Icon className="mr-2" size={20} />
@@ -59,7 +60,6 @@ const Sidebar = () => {
             })}
           </ul>
         </div>
-        <div></div>
       </nav>
     </aside>
   );
