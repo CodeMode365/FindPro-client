@@ -18,7 +18,7 @@ const ProApplication = () => {
           Recent Professionals Application
         </CardTitle>
       </CardHeader>
-      <CardContent className="">
+      <CardContent className="px-4">
         <ScrollArea className="h-80 lg:h-56">
           {Array.from({ length: 10 }).map((_, i) => (
             <Link href={"#"} key={"app-item-" + i}>

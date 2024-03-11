@@ -1,5 +1,6 @@
 import VerifiedBadge from "@/components/reusable/VerifiedBadge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,11 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
 
 const ProApplicationCard = () => {
   return (
-    <Card className=" mt-2">
-      <CardHeader className="flex flex-row items-center -my-2">
+    <Card className=" mt-2 bg-gray-100 hover:bg-sky-300 transition grid grid-cols-8">
+      <CardHeader className="flex flex-row items-center -my-1 py-3 px-2 col-span-5">
         <span className="mx-2 cursor-pointer relative">
           <Avatar className="h-10 w-10">
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -32,28 +34,12 @@ const ProApplicationCard = () => {
           </CardDescription>
         </span>
       </CardHeader>
-      <CardContent className="-mt-4">
-        <h3 className="text-sm text-muted-foreground">
-          Applided for:
-          <span className="text-primary"> Driver</span>
-        </h3>
+      <CardContent className="col-span-3 m-0 p-0 flex items-center justify-center">
+        <h2 className="text-xs">
+          Applied for:
+          <Badge className="font-normal ml-2">Driver</Badge>
+        </h2>
       </CardContent>
-      <CardFooter className="-mt-4 -mb-2">
-        <Button
-          size={"sm"}
-          variant={"outline"}
-          className="text-emerald-500 hover:bg-emerald-200 hover:text-emerald-700"
-        >
-          Accept
-        </Button>
-        <Button
-          size={"sm"}
-          variant={"outline"}
-          className="text-rose-500 hover:bg-rose-200 hover:text-rose-700 ml-2"
-        >
-          Reject
-        </Button>
-      </CardFooter>
     </Card>
   );
 };
