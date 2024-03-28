@@ -5,43 +5,44 @@ import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Info } from "lucide-react";
-import { useEffect } from "react";
-import { permanentRedirect } from "next/navigation";
-import { userLogin } from "@/lib/server/actions/Auth";
+import { FormEvent, useState } from "react";
+import { permanentRedirect, redirect, useRouter } from "next/navigation";
 import { toastGenerator } from "@/lib/helpers";
-import { useLoadingStore } from "@/lib/states/loadingStore";
+import axios from "axios";
+import { Info } from "lucide-react";
+import _ from "lodash";
 
 const Login = () => {
-  const { isLoading, stopLoading, startLoading } = useLoadingStore();
-
+  const router = useRouter();
   const handleSubmit = async (formData: FormData) => {
-    startLoading();
     toastGenerator("loading");
-    const res = await userLogin(formData);
-    if (res.success) {
-      if (res.data.message && res.data.message == "Verify your email!") {
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_PATH}/auth/login`,
+        {
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }
+      );
+      if (res.data.message == "verify your email!") {
         toast.remove();
         toast("Verify your email!", {
           icon: <Info className="text-primary" />,
         });
-        return permanentRedirect(
-          `/register/verify-email?email=${res.data.email}`
+        return router.push(
+          `/register/verify-email?email=${formData.get("email")}`
         );
       }
-      stopLoading();
-      toastGenerator("success", "Login successful!");
-      return permanentRedirect("/");
-    } else {
-      toastGenerator("error", res.message);
+      toastGenerator("success", res.data.message);
+      localStorage.setItem("auth-token", res.data.data.token);
+      localStorage.setItem("user-data", JSON.stringify(_.pick(res.data.data, ["email","fristname","lastname","verificationStatus"])));
+      return router.push("/dashboard");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toastGenerator("error", error.response?.data.message);
+      }
     }
-    stopLoading();
   };
-
-  useEffect(() => {
-    stopLoading();
-    return () => startLoading();
-  }, []);
 
   return (
     <form action={handleSubmit} className="mt-8 grid grid-cols-6 gap-6">
@@ -90,9 +91,7 @@ const Login = () => {
       </div>
 
       <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-        <Button disabled={isLoading} type="submit" aria-disabled={isLoading}>
-          Login
-        </Button>
+        <Button type="submit">Login</Button>
 
         <p className="mt-4 text-sm text-gray-500 sm:mt-0">
           Don&apos;t have an account?

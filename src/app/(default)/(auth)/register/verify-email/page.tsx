@@ -4,69 +4,74 @@ import { useLayoutEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { toastGenerator } from "@/lib/helpers";
-import { permanentRedirect, useSearchParams } from "next/navigation";
-import { resendVerificationCode, verifyEmail } from "@/lib/server/actions/Auth";
-import { useLoadingStore } from "@/lib/states/loadingStore";
+import { permanentRedirect, useSearchParams,useRouter } from "next/navigation";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import axios from "axios";
 
 const EmailVerification = () => {
-  const { isLoading, startLoading, stopLoading } = useLoadingStore();
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [code, setCode] = useState("");
   const searchParams = useSearchParams();
+  const router = useRouter()
 
   const resendCode = async () => {
-    startLoading();
     toastGenerator("loading", "Sending code!");
-    const res = await resendVerificationCode(userEmail);
-    if (res.success) {
-      toastGenerator("success", "Code sent!");
-    } else {
-      toastGenerator("error", res.message);
+    console.log("sending");
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/sendcode`,
+        {
+          email: userEmail,
+          type: "verify",
+        }
+      );
+      toastGenerator("success", res.data.message);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toastGenerator("error", error.response?.data.message);
+      }
     }
-    stopLoading();
   };
 
   const submitHandler = async () => {
-    startLoading();
     toastGenerator("loading", "Verifying your code!");
     if (code.length !== 6) {
-      stopLoading();
-      console.log(code);
       return toastGenerator("error", "Invalid code!");
     }
-    const res = await verifyEmail(userEmail, code);
-    if (res.success) {
-      stopLoading();
-      toastGenerator("success", "Email verified!");
-      return permanentRedirect("/");
-    } else {
-      toastGenerator("error", res.message);
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/verifyEmail`,
+        {
+          code,
+          email: userEmail,
+        }
+      );
+      toastGenerator("success", res.data.message);
+      return router.push("/dashboard");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toastGenerator("error", error.response?.data.message);
+      }
     }
-    stopLoading();
   };
 
   useLayoutEffect(() => {
-    stopLoading();
     const email = searchParams.get("email");
     if (email) {
       setUserEmail(email);
     } else {
       toastGenerator("error", "Missing email!");
-      permanentRedirect("/register");
+      return permanentRedirect("/register");
     }
   }, [searchParams.get("email")]);
 
   return (
-    <form
-      action={submitHandler}
-      className="mt-8 flex flex-col items-center space-y-10 md:-my-20"
-    >
+    <form className="mt-8 flex flex-col items-center space-y-10 md:-my-20">
       <div className="-mb-4">
         <Image src={"/logo.svg"} alt="logo" width={120} height={120} />
         <h1 className="text-2xl text-primary text-center my-2 font-semibold">
@@ -123,10 +128,10 @@ const EmailVerification = () => {
         />
       </div>
       <div className="w-full flex justify-between">
-        <Button variant={"outline"} disabled={isLoading} onClick={resendCode}>
+        <Button type="button" variant={"outline"} onClick={() => resendCode()}>
           Resend Code
         </Button>
-        <Button type="submit" disabled={isLoading}>
+        <Button type="button" onClick={submitHandler}>
           Verify
         </Button>
       </div>

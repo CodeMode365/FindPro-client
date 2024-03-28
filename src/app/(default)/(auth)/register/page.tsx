@@ -2,41 +2,46 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import toast from "react-hot-toast";
 import Link from "next/link";
-import { permanentRedirect } from "next/navigation";
-import { createUser } from "@/lib/server/actions/Auth";
+import { permanentRedirect, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { toastGenerator } from "@/lib/helpers";
+import { FormEvent, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 import { Info } from "lucide-react";
-import { useLoadingStore } from "@/lib/states/loadingStore";
-import { useEffect } from "react";
 
 const Register = () => {
-  const { isLoading, startLoading, stopLoading } = useLoadingStore();
+  const router = useRouter();
+
   const submitHandler = async (formData: FormData) => {
-    startLoading();
-    toastGenerator("loading", "Please wait!");
-    const res = await createUser(formData);
-    if (res.success) {
-      if (res.data.message && res.data.message == "Verify your email!") {
-        toast("Verify your email!", {
+    toastGenerator("loading");
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_PATH}/auth/register`,
+        {
+          email: formData.get("email"),
+          password: formData.get("password"),
+          firstname: formData.get("firstname"),
+          lastname: formData.get("lastname"),
+        }
+      );
+      if (res.data.message == "verify your email!") {
+        toast.remove();
+        toast("Verify email!", {
           icon: <Info className="text-primary" />,
         });
-        return permanentRedirect(
-          `/register/verify-email?email=${res.data.email}`
-        );
+        return router.push(`/register/verify-email?email=${formData.get("email")}`);
       }
-      toastGenerator("success", "Account Registered!");
-    } else {
-      toastGenerator("error", res.message);
+      toastGenerator("success", res.data.message);
+    } catch (error) {
+      console.log(error);
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        toastGenerator("error", error.response?.data.message);
+      }
     }
-    stopLoading();
   };
-
-  useEffect(() => {
-    stopLoading();
-  }, []);
 
   return (
     <form action={submitHandler} className="mt-8 grid grid-cols-6 gap-6">
@@ -168,9 +173,7 @@ const Register = () => {
       </div>
 
       <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-        <Button type="submit" disabled={isLoading}>
-          Create an account
-        </Button>
+        <Button type="submit">Create an account</Button>
 
         <p className="mt-4 text-sm text-gray-500 sm:mt-0">
           Already have an account?
