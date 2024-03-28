@@ -3,8 +3,6 @@ import BannerCarousel from "./_components/Banner/BannerCrousel";
 import Paginator from "./_components/Paginator";
 
 const Explore = () => {
-  
-
   return (
     <div className="w-full md:ml-4 md:p-2 ">
       <div className=" h-auto col-span-full rounded-md shadow-lg mb-4">
