@@ -1,14 +1,26 @@
 import React from "react";
-import ProCard from "./ProCard";
+import ProCard, { iUser } from "./ProCard";
+import axios from "axios";
 
-const Professionals = () => {
+const Professionals = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/user/many`, {
+    next: {
+      revalidate: 60,
+    },
+  });
+  const allUsers = await res.json();
+  console.log(allUsers);
   return (
     <>
-      {Array.from({ length: 8 }).map((_, i) => (
-        <div key={"item-no-" + i}>
-          <ProCard />
-        </div>
-      ))}
+      {allUsers ? (
+        (allUsers.users as []).map((user, i) => (
+          <div key={"item-no-" + i}>
+            <ProCard loading={false} {...(user as iUser)} />
+          </div>
+        ))
+      ) : (
+        <ProCard loading={true} />
+      )}
     </>
   );
 };
