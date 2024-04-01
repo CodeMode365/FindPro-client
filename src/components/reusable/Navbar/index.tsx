@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import MiniNav from "./MiniNav";
 import { Progressbar } from "../Progressbar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import AuthService from "./AuthService";
 
 const Navbar = () => {
   return (
@@ -23,23 +25,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="sm:flex sm:gap-4">
-              <Link
-                className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white shadow"
-                href="/login"
-              >
-                Login
-              </Link>
-
-              <div className="hidden sm:flex">
-                <Link
-                  className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-primary"
-                  href="/register"
-                >
-                  Register
-                </Link>
-              </div>
-            </div>
+            <AuthService />
 
             <div className="block md:hidden">
               <MiniNav>
